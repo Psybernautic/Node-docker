@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { MONGO_USER, MONGO_PASS, MONGO_IP, MONGO_PORT } = require("./config/config");
 
-const app = express()
+const postRouter = require("./routes/postRoutes")
+
+const app = express();
 
 const mongoURL = `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_IP}:${MONGO_PORT}/database?authSource=admin`
 
@@ -13,17 +15,20 @@ const connectWithRetry = () => {
         console.log(e)
         setTimeout(connectWithRetry, 5000)
     });
-}
+};
 
-connectWithRetry()
+connectWithRetry();
 
+app.use(express.json());
 
 app.get("/",(req, res) =>{
     res.send("<h2>Changes made</h2>");
-})
+});
 
+
+app.use("/api/v1/posts", postRouter);
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(port, () => console.log(`Listening on port ${port}`));
 
 
