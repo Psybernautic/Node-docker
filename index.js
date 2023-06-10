@@ -32,6 +32,8 @@ const connectWithRetry = () => {
 
 connectWithRetry();
 
+
+app.enable("trust proxy");
 // Initialize sesssion storage.
 app.use(
     session({
@@ -40,25 +42,21 @@ app.use(
       cookie: {
         resave: false,
         httpOnly: true,
-        maxAge: 60000,
+        maxAge: 30000,
         secure: false,
         saveUninitialized: false
       }
 }))
 
-// Middleware
 app.use(express.json());
 
-
-
-
-app.get("/",(req, res) =>{
+app.get("/api/v1",(req, res) =>{
     res.send("<h2>Changes made</h2>");
+    console.log("yeah it ran")
 });
 
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/users", userRouter);
 
 const port = process.env.PORT || 3000;
-
 app.listen(port, () => console.log(`Listening on port ${port}`));
