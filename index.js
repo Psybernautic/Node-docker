@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require('express-session');
 const redis = require("redis");
+const cors = require("cors")
 
 
 // Constants and environment variables 
@@ -35,6 +36,7 @@ connectWithRetry();
 
 app.enable("trust proxy");
 // Initialize sesssion storage.
+app.use(cors({}))
 app.use(
     session({
       store: new RedisStore({ client: redisClient }),
